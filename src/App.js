@@ -17,31 +17,31 @@ function App() {
   useEffect(() => {
     const fetchMoedas = async () => {
       try {
-        const resposta = await axios.get('http://localhost:3001/moedas');
-        console.log('Resposta do backend:', resposta.data);
-  
+        const resposta = await axios.get("http://localhost:3001/moedas");
         if (Array.isArray(resposta.data)) {
           const moedasArray = resposta.data.map((moeda) => ({
-            value: moeda.code,
-            label: moeda.name ? `${moeda.name} (${moeda.code})` : moeda.code,
+            value: moeda.code, // Sigla da moeda
+            label: moeda.code, // Exibe apenas a sigla no select
           }));
-  
-          console.log('Moedas formatadas no frontend:', moedasArray);
           setOpcoesMoeda(moedasArray);
         } else {
-          console.error('O backend não retornou um array válido:', resposta.data);
+          console.error("O backend não retornou um array válido:", resposta.data);
         }
       } catch (erro) {
-        console.error('Erro ao obter a lista de moedas:', erro);
+        console.error("Erro ao obter a lista de moedas:", erro);
       }
     };
-  
+
     fetchMoedas();
   }, []);
 
-  
-   
+
   const handleConverter = async () => {
+    if (!valor || !moedaOrigem || !moedaDestino) {
+      alert("Preencha todos os campos!");
+      return;
+    }
+
     try {
       const resposta = await axios.post("http://localhost:3001/converter", {
         valor: parseFloat(valor),
@@ -67,18 +67,20 @@ function App() {
             value={valor}
             onChange={(e) => setValor(e.target.value)}
           />
-          <Select
-            label="Converter de"
-            options={opcoesMoeda}
-            onChange={(e) => setMoedaOrigem(e.target.value)}
-            value={moedaOrigem}
-          />
-          <Select
-            label="Para"
-            options={opcoesMoeda}
-            onChange={(e) => setMoedaDestino(e.target.value)}
-            value={moedaDestino}
-          />
+     <Select
+  label="Converter de"
+  options={[{ value: "", label: "Selecione uma moeda" }, ...opcoesMoeda]}
+  onChange={(e) => setMoedaOrigem(e.target.value)}
+  value={moedaOrigem}
+/>
+<Select
+  label="Para"
+  options={[{ value: "", label: "Selecione uma moeda" }, ...opcoesMoeda]}
+  onChange={(e) => setMoedaDestino(e.target.value)}
+  value={moedaDestino}
+/>
+
+
           <Button onClick={handleConverter} label="Converter" />
         </div>
         {resultado && (

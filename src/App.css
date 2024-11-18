@@ -6,6 +6,7 @@ body, html {
   width: 100%;
   background-color: #a8a6a657; 
   font-family: Arial, sans-serif;
+  overflow-y: hidden;
 }
 
 .container{
