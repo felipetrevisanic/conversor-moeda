@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.css'
 
-const Button = () => {
+const Button = ({onClick}) => {
     return (
-        <button className='button'>
+        <button className='button' onClick={onClick}>
            <svg
                 className="swap-icon"
                 xmlns="http://www.w3.org/2000/svg"
